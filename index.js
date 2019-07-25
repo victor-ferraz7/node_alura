@@ -1,10 +1,5 @@
-const express = require('express')
-const app = express()
+let app = require('./config/custom-express.js')();
 
-app.get('/',(req,res) =>{
-    res.send("Requisição recebida na raiz")
-})
-
-app.listen(3000,()=>{
-    console.log(`Rodando na porta 3000`)
-})
+app.listen(3000,function(){
+    console.log(`Servidor na porta 3000`);
+});
