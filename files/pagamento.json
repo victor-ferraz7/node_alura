@@ -1,0 +1,6 @@
+{
+    "tipo_de_pagamento":"payfast",
+    "valor": 10.89,
+    "moeda":"BRL",
+    "descricao":"criando um pagamento" 
+}
