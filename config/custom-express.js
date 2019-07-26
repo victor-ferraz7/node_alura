@@ -1,6 +1,6 @@
-let express = require('express');
-let consign = require('consign');
-let bodyParser = require('body-parser');
+const express = require('express');
+const consign = require('consign');
+const bodyParser = require('body-parser');
 
 module.exports = ()=>{
     let app = express();
@@ -10,6 +10,7 @@ module.exports = ()=>{
 
     consign()
         .include('controllers')
+        .then('persistencia')
         .into(app);
 
     return app;
