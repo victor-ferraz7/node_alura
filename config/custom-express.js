@@ -8,7 +8,7 @@ const expressValidator = require('express-validator');
 module.exports = ()=>{
     let app = express();
    
-    app.use(expressValidator());
+    app.use(expressValidator()); // refatorar !
     app.use(bodyParser.urlencoded({extended: true}))
     app.use(bodyParser.json());
     

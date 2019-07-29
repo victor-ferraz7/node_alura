@@ -1,6 +1,6 @@
 {
-    "forma_de_pagamento":"",
-    "valor": 18.98,
-    "moeda":"BRL",
+    "forma_de_pagamento":"dinheiro",
+    "valor": 123.58,
+    "moeda":"USD",
     "descricao":"criando um pagamento" 
 }
