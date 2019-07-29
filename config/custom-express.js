@@ -5,7 +5,7 @@ const expressValidator = require('express-validator');
 
 
 
-module.exports = ()=>{
+module.exports = ()=> {
     let app = express();
    
     app.use(expressValidator()); // refatorar !
