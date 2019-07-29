@@ -15,8 +15,13 @@ module.exports = (app)=>{
         let pagamentoDao = new app.persistencia.PagamentoDao(connection);
 
         pagamentoDao.salva(pagamento, (erro, resultado) =>{
-            console.log('Pagamento Criado')
+            if(erro){
+                res.send(erro);
+            }
+            else {
+            console.log('Pagamento Criado');
             res.json(pagamento);
+            }
         });
         
     });
