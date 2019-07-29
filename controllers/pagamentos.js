@@ -1,7 +1,28 @@
 module.exports = (app)=>{
     app.get('/pagamentos',(req,res)=> {
-        res.send('Pagamentos :)');
         console.log('Requisição na rota /pagamentos');
+        res.send('Ok');
+    });
+
+    app.delete('/pagamentos/pagamento/:id', (req,res) =>{
+        let pagamento = {};
+        let id = req.params.id;
+
+        pagamento.id = id;
+        pagamento.status = 'CANCELADO';
+
+        let connection = app.persistencia.connectionFactory();
+        let pagamentoDao = new app.persistencia.PagamentoDao(connection);
+
+        pagamentoDao.atualiza(pagamento,(erro) =>{
+            if (erro){
+              res.status(500).send(erro);
+              return;
+            } 
+            console.log('pagamento cancelado');
+            res.status(204).send(pagamento);
+        });
+
     });
 
     app.put('/pagamentos/pagamento/:id', (req,res) =>{
@@ -19,6 +40,7 @@ module.exports = (app)=>{
             res.status(500).send(erro);
             return;
           } 
+          console.log('pagamento criado');
           res.send(pagamento);
         });
 
