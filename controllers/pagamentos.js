@@ -8,20 +8,33 @@ module.exports = (app)=>{
         let id = req.params.id;
         console.log(`consultando pagamento: ${id}`);
 
-        
-        let connection = app.persistencia.connectionFactory();
-        let pagamentoDao = new app.persistencia.PagamentoDao(connection);
+        let memcachedClient = app.servicos.memcachedClient();
 
-        pagamentoDao.buscaPorId(id, (erro, resultado) =>{
-            if (erro){
-                console.log(`Erro ao consultar no banco: ${erro}` );
-                res.status(500).send(erro);
+        memcachedClient.get(`pagamento-${id}`, (erro, retorno) =>{
+            if (erro || !retorno){
+                console.log('MISS - Chave não encontrada');
+                let connection = app.persistencia.connectionFactory();
+                let pagamentoDao = new app.persistencia.PagamentoDao(connection);
+
+                pagamentoDao.buscaPorId(id, (erro, resultado) =>{
+                    if (erro){
+                        console.log(`Erro ao consultar no banco: ${erro}` );
+                        res.status(500).send(erro);
+                        return;
+                    }
+                    console.log(`Pagamento encontrado: ${JSON.stringify(resultado)}`);
+                    res.json(resultado);
+                    return;
+                });
+                //hitno cache
+            }else{
+                console.log(`HIT - valor: ${JSON.stringify(retorno)}`);
+                res.json(retorno);
                 return;
             }
-            console.log(`Pagamento encontrado: ${JSON.stringify(resultado)}`);
-            res.json(resultado);
-            return;
         });
+
+        
     });
 
     app.delete('/pagamentos/pagamento/:id', (req,res) =>{
@@ -99,6 +112,9 @@ module.exports = (app)=>{
             else {
             pagamento.id = resultado.insertId;
             console.log('Pagamento Criado');
+
+            let memcachedClient = app.servicos.memcachedClient();
+                memcachedClient.set(`pagamento -${pagamento.id}`, pagamento, 6000, (erro) => console.log(`nova chave adicionada ao cache: pagamento-${pagamento.id}`));
 
             if(pagamento.forma_de_pagamento == 'cartao'){
                 let cartao = req.body['cartao'];
