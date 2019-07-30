@@ -1,9 +1,14 @@
 const soap = require('soap');
 
-soap.createClient('http://ws.correios.com.br/calculador/CalcPrecoPrazo.asmx?wsdl', (erro, cliente) =>{
-    console.log('cliente soap criado');
-    
-    cliente.CalcPrazo({'nCdServico':'40010','sCepOrigem':'04101300','sCepDestino':'11750000'}, (err, resultado)=>{
-        console.log(JSON.stringify(resultado));
+function CorreiosSOAPClient(){
+    this._url = 'http://ws.correios.com.br/calculador/CalcPrecoPrazo.asmx?wsdl';
+}
+
+module.exports = () => CorreiosSOAPClient;
+
+CorreiosSOAPClient.prototype.calculaPrazo = function(args, callback){
+    soap.createClient(this._url, function(erro, cliente){
+        console.log('cliente soap criado');       
+        cliente.CalcPrazo(args, callback);
     });
-});
+}
