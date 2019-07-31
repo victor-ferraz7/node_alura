@@ -19,6 +19,7 @@
     "nodemon": "^1.19.1",
     "restify": "~4.1.1",
     "restify-clients": "~1.5.0",
-    "soap": "^0.29.0"
+    "soap": "^0.29.0",
+    "winston": "^3.2.1"
   }
 }
