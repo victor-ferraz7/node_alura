@@ -11,8 +11,17 @@ if (cluster.isMaster){
     cpus.forEach(function(){
         cluster.fork();
     })
+
+    cluster.on('listening', (worker) =>{
+        console.log(`cluster conectado ${worker.process.pid}`);
+    });
+
+    cluster.on('exit', (worker) =>{
+        console.log(`cluster ${worker.process.pid} desconectado`);
+        cluster.fork();
+    })
    
 }else{
     console.log('thread slave');
-    require('./index')
+    require('./index');
 }
